@@ -1,0 +1,14 @@
+<div class="row">
+        <div class="col-lg-4" ng-repeat="fList in fLists" style=" text-align: center;" ng-if="fList.id != undefined">
+          <img class="img-circle" ng-src="{{foodPrefix}}{{fList.img}}" alt="{{fList.keywords}}" style="width: 140px; height: 140px;">
+          <h2>{{fList.name}}</h2>
+          <p style="width:70%; height: 20%; overflow: hidden;text-overflow: ellipsis;white-space: nowrap; margin:0 auto; ">{{fList.description}}</p>
+          <p><a class="btn btn-default" ui-sref="navbar.Tdetail({id:fList.id})" role="button">详情 &raquo;</a></p>
+        </div><!-- /.col-lg-4 -->
+</div><!-- /.row -->
+
+<nav style="text-align: center;">
+  <ul class="pagination" >
+    <li ng-repeat="page in pageLCountist"><a href="#/navbar/Flist/{{id}}/{{page}}">{{page}}</a></li>
+  </ul>
+</nav>

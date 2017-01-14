@@ -3,12 +3,13 @@
     header("Access-Control-Allow-Origin:*");
     header('Content-type:text/html;charset=utf-8');
 
-     $cityname = isset($_GET["cityname"])?$_GET["cityname"]:'杭州';
-     
+    $id = isset($_GET["id"])?$_GET["id"]:0;
+   
+  
     $ch = curl_init();
-    $url = 'http://apis.baidu.com/apistore/weatherservice/cityname?cityname='.$cityname;
+    $url = 'http://apis.baidu.com/tngou/food/show?id='.$id;
     $header = array(
-        'apikey: 93f6a5623f11c4d9173020e9321052b8',
+        'apikey: 2dd75e4d2bb6397624eaa7f96d7a5f6e',
     );
     // 添加apikey到header
     curl_setopt($ch, CURLOPT_HTTPHEADER  , $header);
@@ -16,6 +17,6 @@
     // 执行HTTP请求
     curl_setopt($ch , CURLOPT_URL , $url);
     $res = curl_exec($ch);
+    
    echo $res;
-   
 ?>

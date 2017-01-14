@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="health">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Carousel Template for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="./css/bootstrap.min.css" rel="stylesheet">
+
+    <style type="text/css">
+      li{
+        list-style: none;
+      }
+    </style>
+
+    
+  </head>
+<!-- NAVBAR
+================================================== -->
+  <body>    
+    <ui-view></ui-view>
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="./js/angular.js"></script>
+    <script type="text/javascript" src="./js/angular-ui-router.js"></script>
+    <script type="text/javascript">
+      var healthApp =angular.module('health',['ui.router'])
+
+
+       .run(function($rootScope, $state, $stateParams) {
+        $rootScope.foodPrefix = "http://tnfs.tngou.net/image";
+
+        $rootScope.$state = $state; 
+        $rootScope.$stateParams = $stateParams; 
+        $rootScope.$on("$stateChangeSuccess", function(event, toState, toParams, fromState, fromParams) {
+            $rootScope.previousState_name = fromState.name; 
+            $rootScope.previousState_params = fromParams; 
+        });
+        $rootScope.back = function(obj) {
+          if($rootScope.previousState_name.trim().length != 0){
+            $state.go($rootScope.previousState_name, $rootScope.previousState_params);
+            
+          }else{
+            $('#'+obj).popover('show');
+
+          }
+        };
+      })
+      .config(function($stateProvider,$urlRouterProvider,$urlMatcherFactoryProvider){
+        $urlRouterProvider.otherwise('/navbar/Flist');
+        $urlMatcherFactoryProvider.caseInsensitive(true);
+        $stateProvider
+        .state('navbar',{
+          url:'/navbar',
+          templateUrl:'./template/navbar.html',
+          controller:'navbarController'
+        })
+        .state('navbar.home',{
+          url:'/home',
+          templateUrl:'./template/home.html',
+          controller:'homeController'
+        })
+        .state('navbar.Flist',{
+          url:'/Flist/:id/:page',
+          templateUrl:'./template/Flist.html',
+          controller:'FlistController'
+        })
+        .state('navbar.Tdetail',{
+          url:'/Tdetail/:id',
+          templateUrl:'./template/Tdetail.html',
+          controller:'TdetailController'
+        })
+      })
+      .controller('navbarController',function($scope,$http){
+           $http({
+               url:'http://1.a1210596767.applinzi.com/Trains/trainsearch.php'
+            }).then(function(res){
+               var result=res.data;
+              var pos=result.indexOf('<script type="text/javascript">');
+              var getResultData=result.substring(0,pos);
+              $scope.trainsearchs=JSON.parse(getResultData).tngou;
+             // console.log($scope.trainsearchs)
+            })
+      })
+      .controller('homeController',function($scope){
+        $scope.welcome = "欢迎来到健康大杂汇";
+      })
+
+
+      .controller('FlistController',function($scope,$stateParams,$http){
+        $http({
+          url:'http://1.a1210596767.applinzi.com/Trains/fList.php',
+          params:{
+            id:$stateParams.id,
+            page:$stateParams.page
+          }
+        }).then(function(res){
+          var Lists=res.data;
+          var pos=Lists.indexOf('<script type="text/javascript">');
+          var getListData=Lists.substring(0,pos);
+          $scope.fLists = JSON.parse(getListData).tngou;
+          //console.log($stateParams);
+          var pageCountList = [1,2,3,4,5,6,7,8];
+          /*var pageCountList = [];
+          var rows = 9;
+
+          for(var i=1;i<=Math.ceil(res.data.total/rows); i++){
+            pageCountList.push(i);
+          }*/
+          $scope.id = $stateParams.id;
+          $scope.pageLCountist = pageCountList;
+          
+        })
+      })
+      .controller('TdetailController',function($scope,$stateParams,$http){
+        $http({
+          url:'http://1.a1210596767.applinzi.com/Trains/Tdetil.php',
+          params:{
+            id:$stateParams.id
+          }
+        }).then(function(res){
+          var detail=res.data;
+          var pos=detail.indexOf('<script type="text/javascript">');
+          var getDetailData=detail.substring(0,pos);
+          $scope.details= JSON.parse(getDetailData);
+          $scope.details.message=$scope.details.message.replace(/<[^>]+>/g,"")
+          $scope.details.summary=$scope.details.summary.replace(/<[^>]+>/g,"")
+           $scope.detail.symptom=$scope.details.symptom.replace(/<[^>]+>/g,"")
+          //console.log($scope.details);
+        })
+      })
+
+      
+    </script>
+  </body>
+</html>
