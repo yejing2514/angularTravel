@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="healthInfo">
+	<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Carousel Template for Bootstrap</title>
+    <style type="text/css">
+    	.row .col-lg-4{
+    		
+    		
+    		margin-top: 100px;
+    		text-align: center;
+    	}
+    	
+    </style>
+    <!--[if lt IE 9]>
+      <script src="http://cdn.bootcss.com/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Custom styles for this template -->		
+	<link rel="stylesheet" type="text/css" href="css/index.css"/>
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.css"/>
+	<link rel="stylesheet" type="text/css" href="css/coursal.css"/>
+	</head>
+	<body> 
+		<ui-view></ui-view>
+
+		<script src="js/jquery-1.11.3.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/angular.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/angular-ui-router.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/angular-sanitize.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var health=angular.module("healthInfo",["ui.router"])
+			.config(function ($stateProvider,$urlRouterProvider,$urlMatcherFactoryProvider) {
+				$urlRouterProvider.otherwise("/parents/home");
+				$urlMatcherFactoryProvider.caseInsensitive(true);
+				$stateProvider
+				.state("parents",{
+					url:"/parents",
+					templateUrl:"./template/parents.html",
+					controller:"parentsController"
+				})
+				.state("parents.home",{
+					url:"/home",
+					templateUrl:"./template/home.html",
+					controller:"homeController"
+				})
+				.state("parents.infoNew",{
+					url:"/infoNew",
+					templateUrl:"./template/infoNew.html",
+					controller:"infoNewController"
+				})
+				.state("parents.infoClassify",{
+					url:"/infoClassify",
+					templateUrl:"./template/infoClassify.html",
+					controller:"infoClassifyController"
+				})
+				.state("parents.infoDetail",{
+					url:"/infoDetail/:id",
+					templateUrl:"./template/infoDetail.html",
+					controller:"infoDetailController"
+				})
+			})
+			/*.factory("getPhp",function ($http,$stateParams) {
+				function getData (str) {
+					var promise= $http({
+						url:"http://1.137473574.applinzi.com/info"+str+".php",
+						params:{
+							id:$stateParams.id,
+							page:$stateParams.page
+						}
+					}).success(function (res) {
+						
+		 				var pos=res.indexOf('<script type="text/javascript">');
+		 				var getresultdata=res.substring(0,pos);
+		 				var finaldata= JSON.parse(getresultdata);		 				
+		 				return finaldata.tngou;		 				
+					})
+					return promise;
+				}
+				return{
+					getData
+				}
+			})*/
+			.controller("parentsController",function ($scope) {
+				
+				
+			})
+			.controller("homeController",function ($scope,$scope,$stateParams,$http) {
+				$http({
+						url:"http://1.137473574.applinzi.com/infoClassfy.php",
+						params:{
+							id:$stateParams.id,
+							page:$stateParams.page
+						}
+					}).success(function (res) {
+						
+		 				var pos=res.indexOf('<script type="text/javascript">');
+		 				var getresultdata=res.substring(0,pos);
+		 				var finaldata= JSON.parse(getresultdata);		 				
+		 				$scope.news= finaldata.tngou;
+		 				$scope.images={src:"img/9.jpg"}
+		 				//console.log($scope.news);
+					})
+			})
+			.controller("infoNewController",function ($scope,$stateParams,$http) {				
+				$http({
+						url:"http://1.137473574.applinzi.com/infoClassfy.php",
+						params:{
+							id:$stateParams.id,
+							page:$stateParams.page
+						}
+					}).success(function (res) {
+						
+		 				var pos=res.indexOf('<script type="text/javascript">');
+		 				var getresultdata=res.substring(0,pos);
+		 				var finaldata= JSON.parse(getresultdata);		 				
+		 				$scope.news= finaldata.tngou;
+		 				//console.log(finaldata.tngou);
+					})
+			})
+			.controller("infoClassifyController",function ($scope,$stateParams,$http) {
+				//$scope.news=getPhp.getData("Classfy");
+				$http({
+						url:"http://1.137473574.applinzi.com/infoClassfy.php",
+						params:{
+							id:$stateParams.id,
+							page:$stateParams.page
+						}
+					}).success(function (res) {
+						
+		 				var pos=res.indexOf('<script type="text/javascript">');
+		 				var getresultdata=res.substring(0,pos);
+		 				var finaldata= JSON.parse(getresultdata);		 				
+		 				$scope.news= finaldata.tngou;		 				
+					})
+			})
+			.controller("infoDetailController",function ($scope,$stateParams,$http,$sce) {
+				//$scope.news=getPhp.getData("Classfy");
+				$http({
+						url:"http://1.137473574.applinzi.com/infoShow.php",
+						params:{
+							id:$stateParams.id
+						}
+				}).success(function (res) {
+		 				var pos=res.indexOf('<script type="text/javascript">');
+		 				var getresultdata=res.substring(0,pos);
+		 				var finaldata= JSON.parse(getresultdata);
+		 				finaldata.message=$sce.trustAsHtml(finaldata.message);
+		 				$scope.messages= finaldata;	
+		 				//finaldata.message=finaldata.message.replace(/<[^>]+>/g,"");
+		 				var arr=[];
+		 				for (var i=1;i<=10;i++) {
+		 					arr.push(i);
+		 				}
+		 				$scope.pages=arr;
+		 				//console.log(arr);
+					})
+			})
+		</script>
+	</body>
+</html>

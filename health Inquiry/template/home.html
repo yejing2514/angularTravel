@@ -1,0 +1,15 @@
+
+
+      <!-- Three columns of text below the carousel -->
+
+      <div class="row">
+        <div class="col-lg-4" ng-repeat="new in news">
+          <img class="img-circle" ng-src="{{images.src}}" alt="Generic placeholder image" style="width: 140px; height: 140px;">
+          <h2>{{new.title}}</h2>
+          <p>{{new.description}}</p>
+          <p><a class="btn btn-default" ui-sref="parents.infoDetail({id:new.id})" role="button"  style="background:#0E90D2;color: white;">详情 &raquo;</a></p>
+        </div><!-- /.col-lg-4 -->      
+      </div>
+
+      <!-- /.row -->
+
