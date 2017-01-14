@@ -3,13 +3,12 @@
     header("Access-Control-Allow-Origin:*");
     header('Content-type:text/html;charset=utf-8');
 
-    $id = isset($_GET["id"])?$_GET["id"]:0;
-   
+    $id = isset($_GET["id"])?$_GET["id"]:'0';
   
     $ch = curl_init();
-    $url = 'http://apis.baidu.com/tngou/food/show?id='.$id;
+    $url = 'http://apis.baidu.com/tngou/drug/classify?id='.$id;
     $header = array(
-        'apikey: 2dd75e4d2bb6397624eaa7f96d7a5f6e',
+        'apikey:09e403b4932ac5f792fabff5a2a9428c',
     );
     // 添加apikey到header
     curl_setopt($ch, CURLOPT_HTTPHEADER  , $header);
